@@ -45,6 +45,7 @@ const logoutUser = async (userId, authToken) => {
     });
     if (response.status !== 200) console.log("Error logging out user");
     const data = await response.json();
+    data.status = response.status;
     return data;
   } catch (err) {
     console.log(err);
@@ -62,6 +63,7 @@ const logoutAllUsers = async (userId, authToken) => {
     });
     if (response.status !== 200) console.log("Error logging out all users");
     const data = await response.json();
+    data.status = response.status;
     return data;
   } catch (err) {
     console.log(err);

@@ -82,13 +82,17 @@ function HamburgerMenu() {
   const menuRef = useRef(null);
   const { user } = useUserContext();
 
-  const toggleMenu = () => {
+  const toggleMenu = (e) => {
     setIsOpen(!isOpen);
   };
 
   useEffect(() => {
     const handleOutsideClick = (event) => {
-      if (menuRef.current && !menuRef.current.contains(event.target)) {
+      if (
+        event.target.id !== "toggleBtn" &&
+        menuRef.current &&
+        !menuRef.current.contains(event.target)
+      ) {
         setIsOpen(false);
       }
     };
@@ -102,95 +106,90 @@ function HamburgerMenu() {
   return (
     <div className="relative md:absolute">
       <div className="md:hidden">
-        <input
-          type="checkbox"
-          id="menu-toggle"
-          className="hidden"
-          checked={isOpen}
-          onChange={toggleMenu}
-        />
-        <label
-          htmlFor="menu-toggle"
-          className="fixed top-4 right-4 z-50 cursor-pointer"
+        <button
+          id="toggleBtn"
+          className="text-white absolute top-[-1rem] right-4 cursor-pointer font-extrabold text-xl z-50"
+          onClick={(e) => {
+            toggleMenu(e);
+          }}
         >
-          <div
-            style={{
-              width: "30px",
-              height: "4px",
-              backgroundColor: "#333",
-              margin: "6px 0",
-              transition: "background-color 0.3s, transform 0.3s",
-            }}
-          ></div>
-        </label>
+          ☰
+        </button>
       </div>
 
       <div
         ref={menuRef}
         id="content"
-        className={`fixed top-0 left-0 h-auto w-48 bg-white transform transition-transform duration-300 ${
-          isOpen ? "translate-x-0" : "-translate-x-48"
+        className={`md:hidden fixed top-0 right-0 h-full w-64 bg-blue-800 transition-transform duration-300 ${
+          isOpen ? "transform translate-x-0" : "transform translate-x-full"
         }`}
-        style={{
-          transform: isOpen ? "translateX(0)" : "translateX(-48rem)",
-        }}
       >
-        <div className="md:hidden bg-gray-800">
-          <div className="px-2 pt-2 pb-3 space-y-1">
-            <Link
-              to="/"
-              className="text-white block px-3 py-2 rounded-md text-base font-medium hover:text-gray-200"
-            >
-              Home
-            </Link>
-            <Link
-              to="/account"
-              className="text-white block px-3 py-2 rounded-md text-base font-medium hover:text-gray-200"
-            >
-              Account
-            </Link>
-            <Link
-              to="/contact"
-              className="text-white block px-3 py-2 rounded-md text-base font-medium hover:text-gray-200"
-            >
-              Contact
-            </Link>
-            {!user && (
-              <>
-                <Link
-                  to="/login"
-                  className="text-white block px-3 py-2 rounded-md text-base font-medium hover:text-gray-200"
-                >
-                  Login
-                </Link>
-                <Link
-                  to="/signup"
-                  className="text-white block px-3 py-2 rounded-md text-base font-medium hover:text-gray-200"
-                >
-                  Signup
-                </Link>
-              </>
-            )}
-            {user && <LogoutButton />}
-          </div>
-          <div className="pt-4 pb-3 border-t border-gray-700">
-            <div className="flex items-center px-5">
+        {isOpen && (
+          <div className="z-50 md:hidden flex flex-col h-full text-white">
+            <div className="py-8 px-6 space-y-4">
+              <Link
+                to="/"
+                className="text-white block px-3 py-2 rounded-md text-base font-medium hover:text-gray-200 transition"
+                onClick={toggleMenu}
+              >
+                Home
+              </Link>
+              <Link
+                to="/account"
+                className="text-white block px-3 py-2 rounded-md text-base font-medium hover:text-gray-200 transition"
+                onClick={toggleMenu}
+              >
+                Account
+              </Link>
+              <Link
+                to="/contact"
+                className="text-white block px-3 py-2 rounded-md text-base font-medium hover:text-gray-200 transition"
+                onClick={toggleMenu}
+              >
+                Contact
+              </Link>
+              {!user && (
+                <>
+                  <Link
+                    to="/login"
+                    className="text-white block px-3 py-2 rounded-md text-base font-medium hover:text-gray-200 transition"
+                    onClick={toggleMenu}
+                  >
+                    Login
+                  </Link>
+                  <Link
+                    to="/signup"
+                    className="text-white block px-3 py-2 rounded-md text-base font-medium hover:text-gray-200 transition"
+                    onClick={toggleMenu}
+                  >
+                    Signup
+                  </Link>
+                </>
+              )}
+              {user && (
+                <LogoutButton
+                  closeMenu={() => {
+                    toggleMenu();
+                  }}
+                  classes="text-white block px-3 py-2 rounded-md text-base font-medium hover:text-gray-200 transition"
+                />
+              )}
+            </div>
+            <div className="flex-grow flex items-start py-4 px-6 border-t border-blue-600">
               <input
                 type="text"
-                className="bg-gray-700 text-white rounded-full px-4 py-2 w-full focus:outline-none focus:shadow-outline"
+                className="bg-blue-600/50 text-white rounded-full px-4 py-2 w-full focus:outline-1 focus:shadow-outline"
                 placeholder="Search"
               />
             </div>
           </div>
-        </div>
+        )}
       </div>
 
       <div
         className={`transition-all ${isOpen ? "opacity-50" : ""}`}
         style={{ marginLeft: "12rem" }}
-      >
-        {/* Rest of your page content */}
-      </div>
+      ></div>
     </div>
   );
 }

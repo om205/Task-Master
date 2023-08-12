@@ -9,7 +9,9 @@ export default function Navbar() {
     <>
       <nav className="bg-blue-500 p-4">
         <div className="flex items-center justify-between mx-auto">
-          <div className="text-white text-xl font-bold">Task-Master</div>
+          <Link to="/" className="text-white text-xl font-bold">
+            Task-Master
+          </Link>
           <div className="hidden md:flex space-x-4 items-center">
             <Link to="/" className="text-white hover:text-gray-200">
               Home
@@ -30,7 +32,7 @@ export default function Navbar() {
                 Signup
               </Link>
             )}
-            {user && <LogoutButton />}
+            {user && <LogoutButton classes="text-white hover:text-gray-200" />}
             <div className="relative">
               <input
                 type="text"
